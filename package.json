@@ -3,8 +3,7 @@
     "kaboom": "^3000.1.17"
   },
   "devDependencies": {
-    "esbuild": "0.20.0",
-    "npm-run-all": "^4.1.5"
+    "esbuild": "0.20.0"
   },
   "scripts": {
     "build": "esbuild src/main.js --bundle --outfile=src/build.js",

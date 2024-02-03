@@ -7,7 +7,7 @@ const SPEED = 480;
 kaboom();
 
 loadSprite("dino", "sprites/dino.png");
-loadSprite("obstacle", "sprites/coin.png")
+loadSprite("obstacle", "sprites/coin.png");
 
 scene("start", () => {
     let taxt = '';
@@ -58,25 +58,25 @@ scene("game", () => {
     // });
     
     function spawnTree() {
-        add([
-            rect(48, rand(24, 64)),
-            area(),
-            outline(4),
-            color(255, 69, 0),
-            pos(width(), height() - FLOOR_HEIGHT),
-            anchor("botleft"),
-            move(LEFT, SPEED), 
-            "tree",
-        ]);
         // add([
-        //     sprite("obstacle"),
+        //     rect(48, rand(24, 64)),
         //     area(),
+        //     outline(4),
+        //     color(255, 69, 0),
         //     pos(width(), height() - FLOOR_HEIGHT),
-        //     move(LEFT, SPEED),
-        //     anchor("botleft"),  
-        //     scale(rand(1, 2)),
+        //     anchor("botleft"),
+        //     move(LEFT, SPEED), 
         //     "tree",
-        // ])
+        // ]);
+        add([
+            sprite("obstacle"),
+            area(),
+            pos(width(), height() - FLOOR_HEIGHT),
+            move(LEFT, SPEED),
+            anchor("botleft"),  
+            scale(rand(1, 2)),
+            "tree",
+        ])
         wait(rand(0.5, 1.5), () => {
             spawnTree();
         });
