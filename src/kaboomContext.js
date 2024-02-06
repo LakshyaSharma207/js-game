@@ -1,5 +1,6 @@
 import kaboom from '../libs/kaboom.mjs';
-// import kaboom from "kaboom"; // use only if mjs import not working
+// use below only if kaboom.mjs import from lib not working
+// import kaboom from "kaboom"; 
 
 const k = kaboom({
     width: 1280,
