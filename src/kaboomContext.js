@@ -1,4 +1,4 @@
-import kaboom from '../libs/kaboom.mjs';
+import kaboom from '../lib/kaboom.mjs';
 // use below only if kaboom.mjs import from lib not working
 // import kaboom from "kaboom"; 
 
