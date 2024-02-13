@@ -1,7 +1,7 @@
 import { drawTiles, fetchMapData } from "../utils/utils.js";
 
 export default async function world(k) {
-    const mapData = await fetchMapData("./assets/maps/world-copy.json");
+    const mapData = await fetchMapData("./assets/maps/world-test.json");
     
     // k.add([
     //     k.rect(k.canvas.width, k.canvas.height),
@@ -24,7 +24,7 @@ export default async function world(k) {
             // TODO
             continue;
         }
-        if (layer.name === "Player") {
+        if (layer.name === "SpawnPoints") {
             // TODO
             continue;
         }

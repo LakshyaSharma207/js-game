@@ -14,11 +14,11 @@ export function drawTiles(k, map, layer, tileheight, tilewidth) {
             tilePos.x += tilewidth;
         }
 
-        noOfDrawnTiles ++;
+        noOfDrawnTiles ++
         if (tile === 0) continue;
 
         map.add([
-            k.sprite("assets", { frame: tile - 1 }),
+            k.sprite("mapAssets", { frame: tile - 1 }),
             k.pos(tilePos),
             k.offscreen(),
         ])
