@@ -1,14 +1,14 @@
 {
-  "dependencies": {
-    "kaboom": "^3000.1.17"
+  "name": "js-game",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "esbuild": "0.20.0"
-  },
-  "scripts": {
-    "build": "esbuild src/main.js --bundle --outfile=src/build.js",
-    "start": "npm run build:watch",
-    "build:watch": "esbuild src/main.js --bundle --outfile=src/build.js --watch",
-    "serve": "live-server"
+    "vite": "^5.1.0"
   }
 }
