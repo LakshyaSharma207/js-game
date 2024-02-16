@@ -1,6 +1,7 @@
+import { GameObject } from "./gameObject";
 import { Vector2 } from "./vector2";
 
-export class Sprite {
+export class Sprite extends GameObject {
     constructor({
         resource,  // image we want tp draw
         frameSize, // size of the image in sprite sheet
@@ -9,7 +10,9 @@ export class Sprite {
         frame,     // tileId of frame we want to show
         scale,     
         position,
+        animations, // house all sprite animations
     }) {
+        super({});
         this.resource = resource;
         this.frameSize = frameSize ?? new Vector2(16, 16);
         this.hFrames = hFrames ?? 1;
@@ -18,6 +21,7 @@ export class Sprite {
         this.frameMap = new Map();
         this.scale = scale ?? 1;
         this.position = position ?? new Vector2(0, 0);
+        this.animations = animations ?? null;
         this.buildframeMap();  // call to build method in constructor 
     }
 
@@ -33,6 +37,15 @@ export class Sprite {
                 frameCount ++;
             }
         }
+    }
+
+    step(delta) {
+        if(!this.animations) {
+            return;
+        }
+        this.animations.step(delta);
+        // get frame from animation class
+        this.frame = this.animations.frame;
     }
 
     drawImage(ctx, x, y) {
