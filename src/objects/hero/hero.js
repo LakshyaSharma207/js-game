@@ -1,4 +1,5 @@
 import { Animations } from "../../animations";
+import { events } from "../../events";
 import { FrameIndexPattern } from "../../frameIndexPattern";
 import { GameObject } from "../../gameObject";
 import { isSpaceFree } from "../../helpers/grid";
@@ -53,7 +54,19 @@ export class Hero extends GameObject {
         if (hasArrived) {
             this.tryMove(root);
         }
+
+        this.tryEmitPosition();        
     }
+
+    tryEmitPosition() {
+        if (this.lastX === this.position.x && this.lastY === this.position.y) {
+          return;
+        }
+        this.lastX = this.position.x;
+        this.lastY = this.position.y;
+        events.emit("hero_position", this.position)
+      }
+    
 
     tryMove(root) {
         const {input} = root;
