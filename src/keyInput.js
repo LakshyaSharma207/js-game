@@ -24,16 +24,16 @@ export class KeyInput {
         })
         document.addEventListener("keyup", (e) => {
 
-            if (e.key === "ArrowUp" || e.key === "W") {
+            if (e.key === "ArrowUp" || e.key === "W" || e.key === "w") {
                 this.onArrowRelease(UP);
             } 
-            else if (e.key === "ArrowDown" || e.key === "S") {
+            else if (e.key === "ArrowDown" || e.key === "S" || e.key === "s") {
                 this.onArrowRelease(DOWN);
             } 
-            else if (e.key === "ArrowLeft" || e.key === "A") {
+            else if (e.key === "ArrowLeft" || e.key === "A" || e.key === "a") {
                 this.onArrowRelease(LEFT);
             } 
-            else if (e.key === "ArrowRight" || e.key === "D") {
+            else if (e.key === "ArrowRight" || e.key === "D" || e.key === "d") {
                 this.onArrowRelease(RIGHT);
             }
         })
