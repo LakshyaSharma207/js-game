@@ -1,16 +1,17 @@
+import './style.css'
 import { GameLoop } from './src/gameLoop';
-import { gridCells } from './src/helpers/grid';
+import { collisionMap, gridCells } from './src/helpers/grid';
 import { KeyInput } from './src/keyInput';
 import { resources } from './src/resource';
 import { Sprite } from './src/sprite';
 import { Vector2 } from './src/vector2';
-import './style.css'
-import { GameObject } from './src/gameObject.js';
+import { GameObject } from './src/objects/gameObject.js';
 import { Hero } from './src/objects/hero/hero.js';
 import { Camera } from './src/camera.js';
 import { Coins } from './src/objects/coins/coins.js';
 import { Hud } from './src/objects/hud/hud.js';
 import { Wumpus } from './src/objects/wumpus/wumpus.js';
+import { Boundary } from './src/boundary.js';
 
 const canvas = document.querySelector("#game-canvas");
 const ctx = canvas.getContext("2d");
@@ -23,7 +24,7 @@ const mainScene = new GameObject({
 
 const groundSprite = new Sprite({
   resource: resources.images.ground,
-  frameSize: new Vector2(320, 180),
+  frameSize: new Vector2(1200, 720),
 });
 mainScene.addChild(groundSprite);
 
@@ -31,12 +32,33 @@ mainScene.addChild(groundSprite);
 const coins = new Coins(gridCells(7), gridCells(6));
 mainScene.addChild(coins);
 
+// add boundaries
+const boundaries = [];
+
+collisionMap.forEach((row, i) => {
+  row.forEach((value, j) => {
+    if (value === 197) {
+      boundaries.push(
+        new Boundary({
+          position: {
+            x: gridCells(j),
+            y: gridCells(i)
+          }
+        })
+      )
+    }
+  })
+});
+boundaries.forEach(b => mainScene.addChild(b));
+// console.log(boundaries);
+
+
 // hero sprite
-const hero = new Hero(gridCells(6), gridCells(5));
+const hero = new Hero(gridCells(6), gridCells(4));
 mainScene.addChild(hero);
 
 // wumpus sprite
-const wumpus = new Wumpus(gridCells(11), gridCells(5));
+const wumpus = new Wumpus(gridCells(15), gridCells(12));
 mainScene.addChild(wumpus);
 
 // camera
@@ -68,6 +90,9 @@ const draw =  () => {
   hud.draw(ctx, 0, 0);
   let coinCount = hud.coinCount;
   ctx.fillText(`X ${coinCount}`, 20, 14);
+
+  // draw boundaries
+  // boundaries.forEach(b => b.draw(ctx, 0, 0));
 }
 
 // updating game state

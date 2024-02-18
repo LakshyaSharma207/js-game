@@ -1,7 +1,7 @@
 import { Animations } from "../../animations";
 import { events } from "../../events";
 import { FrameIndexPattern } from "../../frameIndexPattern";
-import { GameObject } from "../../gameObject";
+import { GameObject } from "../gameObject";
 import { resources } from "../../resource";
 import { Sprite } from "../../sprite";
 import { Vector2 } from "../../vector2";

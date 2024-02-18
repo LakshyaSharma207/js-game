@@ -1,4 +1,4 @@
-import { GameObject } from "./gameObject";
+import { GameObject } from "./objects/gameObject";
 import { Vector2 } from "./vector2";
 
 export class Sprite extends GameObject {

@@ -1,5 +1,5 @@
 import { events } from "../../events";
-import { GameObject } from "../../gameObject";
+import { GameObject } from "../gameObject";
 import { resources } from "../../resource";
 import { Sprite } from "../../sprite";
 import { Vector2 } from "../../vector2";

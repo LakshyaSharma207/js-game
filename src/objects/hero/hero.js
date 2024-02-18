@@ -1,11 +1,9 @@
 import { Animations } from "../../animations";
 import { events } from "../../events";
 import { FrameIndexPattern } from "../../frameIndexPattern";
-import { GameObject } from "../../gameObject";
-import { isSpaceFree } from "../../helpers/grid";
+import { GameObject } from "../gameObject";
 import moveTowards from "../../helpers/moveTowards";
 import { DOWN, LEFT, RIGHT, UP } from "../../keyInput";
-import { walls } from "../../levels/level1";
 import { resources } from "../../resource";
 import { Sprite } from "../../sprite";
 import { Vector2 } from "../../vector2";
@@ -46,10 +44,12 @@ export class Hero extends GameObject {
         this.addChild(this.body);
         this.facingDirection = DOWN;
         this.destinationPosition = this.position.duplicate();
+        this.canWalk = true;
+        
     }
 
     step(delta, root) {
-        const distance = moveTowards(this, this.destinationPosition, 1);
+        const distance = moveTowards(this, this.destinationPosition, 2);
         const hasArrived = distance <= 1;
         if (hasArrived) {
             this.tryMove(root);
@@ -110,9 +110,20 @@ export class Hero extends GameObject {
         this.facingDirection = input.direction ?? this.facingDirection;
         
         // is the place character movig to solid or ground?
-        if (isSpaceFree(walls, nextX, nextY)) {
+        this.canWalk = true;
+        this.isSpaceFree(new Vector2(nextX, nextY))
+        if (this.canWalk) {
             this.destinationPosition.y = nextY;
             this.destinationPosition.x = nextX;
         }
+    }
+
+    isSpaceFree (pos) {
+        events.emit("hero_position2", pos)
+
+        events.on("hero_collide", this, (object) => {
+            this.canWalk = false;
+       })
+    //    console.log(this.canWalk);
     }
 }

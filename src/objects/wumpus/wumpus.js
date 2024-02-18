@@ -1,4 +1,4 @@
-import { GameObject } from "../../gameObject";
+import { GameObject } from "../gameObject";
 import { resources } from "../../resource";
 import { Sprite } from "../../sprite";
 import { Vector2 } from "../../vector2";
@@ -9,7 +9,7 @@ export class Wumpus extends GameObject {
             position: new Vector2(x, y)
         })
 
-        const body = new Sprite({
+        this.body = new Sprite({
             resource: resources.images.wumpus,
             frameSize: new Vector2(16, 16),
             position: new Vector2(0, 0),
@@ -18,6 +18,6 @@ export class Wumpus extends GameObject {
             frame: 1,
         })
 
-        this.addChild(body);
+        this.addChild(this.body);
     }
 }
