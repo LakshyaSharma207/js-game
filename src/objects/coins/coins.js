@@ -33,6 +33,8 @@ export class Coins extends GameObject {
 
             if (roundedX === this.position.x && roundedY === this.position.y) {
                // objects overlapped
+               var audio = new Audio('/sprites/collectcoin-6075.mp3');
+               audio.play();
                this.onCollideWithHero();
             }
        })

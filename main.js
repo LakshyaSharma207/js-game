@@ -12,6 +12,7 @@ import { Coins } from './src/objects/coins/coins.js';
 import { Hud } from './src/objects/hud/hud.js';
 import { Wumpus } from './src/objects/wumpus/wumpus.js';
 import { Boundary } from './src/boundary.js';
+import { Astar } from './src/A-star.js';
 
 const canvas = document.querySelector("#game-canvas");
 const ctx = canvas.getContext("2d");
@@ -33,7 +34,7 @@ const coins = new Coins(gridCells(7), gridCells(6));
 mainScene.addChild(coins);
 
 // add boundaries
-const boundaries = [];
+export const boundaries = [];
 
 collisionMap.forEach((row, i) => {
   row.forEach((value, j) => {
@@ -50,16 +51,19 @@ collisionMap.forEach((row, i) => {
   })
 });
 boundaries.forEach(b => mainScene.addChild(b));
-// console.log(boundaries);
+// console.log(mainScene);
 
 
-// hero sprite
+// hero game object added
 const hero = new Hero(gridCells(6), gridCells(4));
 mainScene.addChild(hero);
 
-// wumpus sprite
-const wumpus = new Wumpus(gridCells(15), gridCells(12));
+// wumpus game object added
+const wumpus = new Wumpus(gridCells(1), gridCells(1), hero.position);
 mainScene.addChild(wumpus);
+
+// A star Pathfinding
+mainScene.pathFind = new Astar();
 
 // camera
 const camera = new Camera();

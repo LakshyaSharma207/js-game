@@ -11,20 +11,19 @@ export class Boundary extends GameObject {
         this.height = 16;
         this.width = 16;
 
-        events.on("hero_position2", this, (heroPosition) => {
+        events.on("character_pos", this, (heroPosition) => {
             const roundedX = Math.round(heroPosition.x);
             const roundedY = Math.round(heroPosition.y);
 
             if (roundedX === this.position.x && roundedY === this.position.y) {
-               // objects overlapped
+               // objects overlapp
                this.onCollideWithHero();
             }
        })
-
     }
 
     onCollideWithHero() {
-        events.emit("hero_collide", this.position);
+        events.emit("check_collision", this.position);
     }
 
     drawImage(ctx, x, y) {

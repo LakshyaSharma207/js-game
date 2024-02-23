@@ -2,10 +2,10 @@ class Resources {
     constructor() {
         this.toLoad = {
             ground: "/dungeon.png",
-            hero: "/sprites/hero-sheet.png",
             shadow: "/sprites/shadow.png",
             coins: "/sprites/MonedaD.png",
-            wumpus: "/sprites/UnravelingCrawler.png",
+            wumpus: "/sprites/Slime.png",
+            agent: "/sprites/Archer-Green.png"
         };
 
         this.images = {};

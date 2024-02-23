@@ -23,12 +23,12 @@ export class Hero extends GameObject {
         this.addChild(shadow);
 
         this.body = new Sprite({
-            resource: resources.images.hero,
+            resource: resources.images.agent,
             frameSize: new Vector2(32, 32),
-            hFrames: 3,
+            hFrames: 24,
             vFrames: 8,
             frame: 1,
-            position: new Vector2(-8, -20),
+            position: new Vector2(-8, -13),
             animations: new Animations({
               walkDown: new FrameIndexPattern(walkDown),
               walkUp: new FrameIndexPattern(walkUP),
@@ -65,7 +65,7 @@ export class Hero extends GameObject {
         this.lastX = this.position.x;
         this.lastY = this.position.y;
         events.emit("hero_position", this.position)
-      }
+    }
     
 
     tryMove(root) {
@@ -73,16 +73,16 @@ export class Hero extends GameObject {
 
         if (!input.direction) {
             if (this.facingDirection === DOWN) {
-            this.body.animations.play("standDown");
+                this.body.animations.play("standDown");
             }
             else if (this.facingDirection === LEFT) { 
-            this.body.animations.play("standLeft")
+                this.body.animations.play("standLeft")
             }
             else if (this.facingDirection === RIGHT) { 
-            this.body.animations.play("standRight")
+                this.body.animations.play("standRight")
             }
             else if (this.facingDirection === UP) { 
-            this.body.animations.play("standUp")
+                this.body.animations.play("standUp")
             }
             return;
         }
@@ -119,9 +119,9 @@ export class Hero extends GameObject {
     }
 
     isSpaceFree (pos) {
-        events.emit("hero_position2", pos)
+        events.emit("character_pos", pos)
 
-        events.on("hero_collide", this, (object) => {
+        events.on("check_collision", this, (object) => {
             this.canWalk = false;
        })
     //    console.log(this.canWalk);
