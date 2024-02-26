@@ -5,6 +5,7 @@ import { Vector2 } from "../../vector2";
 import moveTowards from "../../helpers/moveTowards";
 import { Animations } from "../../animations";
 import { FrameIndexPattern } from "../../frameIndexPattern";
+import { chase } from "./wumpusAnimation";
 
 export class Wumpus extends GameObject {
     constructor(x, y, heroPos) {
@@ -20,7 +21,7 @@ export class Wumpus extends GameObject {
             vFrames: 1,
             frame: 3,
             animations: new Animations({
-                idle: new FrameIndexPattern(idle),
+                // idle: new FrameIndexPattern(idle),  // not yet implemented
                 chase: new FrameIndexPattern(chase),
             })
         })
@@ -47,7 +48,9 @@ export class Wumpus extends GameObject {
 
         if (newPath) {
             this.path = newPath;
-            console.log(this.path, 'path');
+            // console.log(this.path, 'path');
+            this.body.animations.play("chase");
+            
             if (this.path.direction === 'left') {
                 this.destinationPosition.x -= 16;
             }
