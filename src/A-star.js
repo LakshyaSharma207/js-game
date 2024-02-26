@@ -103,28 +103,28 @@ export class Astar {
         // Left neighbor
         if(node.tx - this.gridSize >= 0 && this.checkWalkable(node, 'left'))
         {
-            let pos = new Vector2(node.tx - 1, node.ty);
+            let pos = new Vector2(node.tx - this.gridSize, node.ty);
             neighbors.push(new GridNode(pos, this.GOAL, node, 'left'));
         }
         
         // Right neighbor
-        if(this.checkWalkable(node, 'right'))
+        if(node.tx + this.gridSize >= 0 && this.checkWalkable(node, 'right'))
         {
-            let pos = new Vector2(node.tx + 1, node.ty);
+            let pos = new Vector2(node.tx + this.gridSize, node.ty);
             neighbors.push(new GridNode(pos, this.GOAL, node, 'right'));
         }
         
         // Up neighbor
         if(node.ty - this.gridSize >= 0 && this.checkWalkable(node, 'up'))
         {
-            let pos = new Vector2(node.tx, node.ty - 1);
+            let pos = new Vector2(node.tx, node.ty - this.gridSize);
             neighbors.push(new GridNode(pos, this.GOAL, node, 'up'));
         }
         
         // Down neighbor
-        if(this.checkWalkable(node, 'down'))
+        if(node.ty + this.gridSize >=0 && this.checkWalkable(node, 'down'))
         {
-            let pos = new Vector2(node.tx, node.ty + 1);
+            let pos = new Vector2(node.tx, node.ty + this.gridSize);
             neighbors.push(new GridNode(pos, this.GOAL, node, 'down'));
         }
 

@@ -3,7 +3,8 @@ import { resources } from "../../resource";
 import { Sprite } from "../../sprite";
 import { Vector2 } from "../../vector2";
 import moveTowards from "../../helpers/moveTowards";
-import { events } from "../../events";
+import { Animations } from "../../animations";
+import { FrameIndexPattern } from "../../frameIndexPattern";
 
 export class Wumpus extends GameObject {
     constructor(x, y, heroPos) {
@@ -18,6 +19,10 @@ export class Wumpus extends GameObject {
             hFrames: 14,
             vFrames: 1,
             frame: 3,
+            animations: new Animations({
+                idle: new FrameIndexPattern(idle),
+                chase: new FrameIndexPattern(chase),
+            })
         })
         this.addChild(this.body);
         this.destinationPosition = this.position.duplicate();
@@ -37,7 +42,8 @@ export class Wumpus extends GameObject {
     tryMove(root) {
         const {pathFind} = root;
 
-        const newPath = pathFind.findPath(this.position, this.heroPos);
+        let nextXY = this.destinationPosition.duplicate();
+        const newPath = pathFind.findPath(nextXY, this.heroPos);
 
         if (newPath) {
             this.path = newPath;
