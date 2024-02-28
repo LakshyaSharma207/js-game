@@ -1,7 +1,9 @@
 ## Work in Progress
 
 A simple implementation of game engine in javascript is done.
+
 Hero and Wumpus Animations and movement is done.
+
 Basic Implementation of A-star Algorithm is done for enemy AI.
 
 Now only waiting for Aashir to complete my map.
