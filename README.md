@@ -1,1 +1,10 @@
-![R a98c19594e39b848251fc13f195e4af5](https://github.com/LakshyaSharma207/KrishiSankalp-gdsc-solutions/assets/124886897/e52b4261-0788-4524-adc9-100c95655021)
+## Work in Progress
+
+A simple implementation of game engine in javascript is done.
+Hero Animations and movement is done.
+Wumpus Animations is done.
+Basic Implementation of A-star Algorithm is done for enemy AI.
+
+Now only waiting for Aashir to complete my map.
+
+I am using free Pixel Art Assets from - [Map](https://0x72.itch.io/16x16-dungeon-tileset), [Hero](), [Wumpus]()
