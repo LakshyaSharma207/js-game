@@ -5,7 +5,8 @@ import { Vector2 } from "../../vector2";
 import moveTowards from "../../helpers/moveTowards";
 import { Animations } from "../../animations";
 import { FrameIndexPattern } from "../../frameIndexPattern";
-import { chase } from "./wumpusAnimation";
+import { attacking, chase, idle } from "./wumpusAnimation";
+import { events } from "../../events";
 
 export class Wumpus extends GameObject {
     constructor(x, y, heroPos) {
@@ -21,8 +22,9 @@ export class Wumpus extends GameObject {
             vFrames: 1,
             frame: 3,
             animations: new Animations({
-                // idle: new FrameIndexPattern(idle),  // not yet implemented
+                idle: new FrameIndexPattern(idle),
                 chase: new FrameIndexPattern(chase),
+                attack: new FrameIndexPattern(attacking),
             })
         })
         this.addChild(this.body);
@@ -30,6 +32,7 @@ export class Wumpus extends GameObject {
         // this.canWalk = true;
         this.heroPos = heroPos;
         this.path;
+        this.hitbox = 34;
     }
 
     step(delta, root) {
@@ -41,31 +44,42 @@ export class Wumpus extends GameObject {
     }
 
     tryMove(root) {
-        const {pathFind} = root;
+        const {astarPathFind} = root;
+        const gridSize = 16;
 
         let nextXY = this.destinationPosition.duplicate();
-        const newPath = pathFind.findPath(nextXY, this.heroPos);
+        const newPath = astarPathFind.findPath(nextXY, this.heroPos);
 
         if (newPath) {
             this.path = newPath;
+            const hitboxObject = {
+                minX: this.position.x - this.hitbox/2,
+                maxX: this.position.x + this.hitbox/2,
+                minY: this.position.y - this.hitbox/2,
+                maxY: this.position.y + this.hitbox/2
+            };            
+            events.emit("check_attacking", hitboxObject);
             // console.log(this.path, 'path');
-            this.body.animations.play("chase");
-            
-            if (this.path.direction === 'left') {
-                this.destinationPosition.x -= 16;
-            }
-            else if (this.path.direction === 'right') {
-                this.destinationPosition.x += 16;
-            }
-            else if (this.path.direction === 'up') {
-                this.destinationPosition.y -= 16;
-            }
-            else if (this.path.direction === 'down') {
-                this.destinationPosition.y += 16;
-            }
-            else {
-                // ..
-            }
+            switch (this.path.direction) {
+                case 'left':
+                    this.destinationPosition.x -= gridSize;
+                    this.body.animations.play("chase");
+                    break;
+                case 'right':
+                    this.destinationPosition.x += gridSize;
+                    this.body.animations.play("chase");
+                    break;
+                case 'up':
+                    this.destinationPosition.y -= gridSize;
+                    this.body.animations.play("chase");
+                    break;
+                case 'down':
+                    this.destinationPosition.y += gridSize;
+                    this.body.animations.play("chase");
+                    break;
+                default:
+                    this.body.animations.play("attack");
+            }            
         }
     }
 }

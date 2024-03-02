@@ -7,7 +7,7 @@ import { DOWN, LEFT, RIGHT, UP } from "../../keyInput";
 import { resources } from "../../resource";
 import { Sprite } from "../../sprite";
 import { Vector2 } from "../../vector2";
-import { standDown, standLeft, standRight, standUP, walkDown, walkLeft, walkRight, walkUP } from "./heroAnimation";
+import { hitDown, hitLeft, hitRight, hitUP, standDown, standLeft, standRight, standUP, walkDown, walkLeft, walkRight, walkUP } from "./heroAnimation";
 
 export class Hero extends GameObject {
     constructor(x, y) {
@@ -25,7 +25,7 @@ export class Hero extends GameObject {
         this.body = new Sprite({
             resource: resources.images.agent,
             frameSize: new Vector2(32, 32),
-            hFrames: 24,
+            hFrames: 23,
             vFrames: 8,
             frame: 1,
             position: new Vector2(-8, -13),
@@ -38,6 +38,10 @@ export class Hero extends GameObject {
               standUp: new FrameIndexPattern(standUP),
               standLeft: new FrameIndexPattern(standLeft),
               standRight: new FrameIndexPattern(standRight),
+              hitDown: new FrameIndexPattern(hitDown),
+              hitUP: new FrameIndexPattern(hitUP),
+              hitLeft: new FrameIndexPattern(hitLeft),
+              hitRight: new FrameIndexPattern(hitRight),
             })
           });
         
@@ -45,6 +49,9 @@ export class Hero extends GameObject {
         this.facingDirection = DOWN;
         this.destinationPosition = this.position.duplicate();
         this.canWalk = true;
+        this.isHit = false;
+        this.hitTimer = null;
+
         
     }
 
@@ -65,6 +72,7 @@ export class Hero extends GameObject {
         this.lastX = this.position.x;
         this.lastY = this.position.y;
         events.emit("hero_position", this.position)
+        // events.emit("hero_hit", this.isHit)
     }
     
 
@@ -72,17 +80,37 @@ export class Hero extends GameObject {
         const {input} = root;
 
         if (!input.direction) {
-            if (this.facingDirection === DOWN) {
-                this.body.animations.play("standDown");
+            if (this.isHit) {
+                switch (this.facingDirection) {
+                    case DOWN:
+                        this.body.animations.play("hitDown");
+                        break;
+                    case LEFT:
+                        this.body.animations.play("hitLeft");
+                        break;
+                    case RIGHT:
+                        this.body.animations.play("hitRight");
+                        break;
+                    case UP:
+                        this.body.animations.play("hitUP");
+                        break;
+                }
             }
-            else if (this.facingDirection === LEFT) { 
-                this.body.animations.play("standLeft")
-            }
-            else if (this.facingDirection === RIGHT) { 
-                this.body.animations.play("standRight")
-            }
-            else if (this.facingDirection === UP) { 
-                this.body.animations.play("standUp")
+            else {
+                switch (this.facingDirection) {
+                    case DOWN:
+                        this.body.animations.play("standDown");
+                        break;
+                    case LEFT:
+                        this.body.animations.play("standLeft");
+                        break;
+                    case RIGHT:
+                        this.body.animations.play("standRight");
+                        break;
+                    case UP:
+                        this.body.animations.play("standUp");
+                        break;
+                }
             }
             return;
         }
@@ -91,22 +119,53 @@ export class Hero extends GameObject {
         let nextY = this.destinationPosition.y;
         const gridSize = 16;
         
-        if (input.direction === "UP") {
-            nextY -= gridSize;
-            this.body.animations.play("walkUp");
-        } 
-        else if (input.direction === "DOWN") {
-            nextY += gridSize;
-            this.body.animations.play("walkDown");
-        } 
-        else if (input.direction === "LEFT") {
-            nextX -= gridSize;
-            this.body.animations.play("walkLeft");
-        } 
-        else if (input.direction === "RIGHT") {
-            nextX += gridSize;
-            this.body.animations.play("walkRight");
+        switch (input.direction) {
+            case "UP":
+                nextY -= gridSize;
+                if (this.isHit) {
+                    this.body.animations.play("hitUP");
+                } else {
+                    this.body.animations.play("walkUp");
+                }
+                break;
+            case "DOWN":
+                nextY += gridSize;
+                if (this.isHit) {
+                    this.body.animations.play("hitDown");
+                } else {
+                    this.body.animations.play("walkDown");
+                }
+                break;
+            case "LEFT":
+                nextX -= gridSize;
+                if (this.isHit) {
+                    this.body.animations.play("hitLeft");
+                } else {
+                    this.body.animations.play("walkLeft");
+                }
+                break;
+            case "RIGHT":
+                nextX += gridSize;
+                if (this.isHit) {
+                    this.body.animations.play("hitRight");
+                } else {
+                    this.body.animations.play("walkRight");
+                }
+                break;
         }
+        // checking for wumpus attack
+        events.on("check_attacking", this, (pos) => {
+            
+            if (this.destinationPosition.x >= pos.minX && this.destinationPosition.x <= pos.maxX && this.destinationPosition.y >= pos.minY && this.destinationPosition.y <= pos.maxY) {
+                // objects overlapped
+                console.log('work pls')
+                clearTimeout(this.hitTimer);
+                this.hitTimer = setTimeout(() => {
+                    this.isHit = false;
+                }, 1000);
+                this.isHit = true;
+            }
+        });
         this.facingDirection = input.direction ?? this.facingDirection;
         
         // is the place character movig to solid or ground?
@@ -119,7 +178,7 @@ export class Hero extends GameObject {
     }
 
     isSpaceFree (pos) {
-        events.emit("character_pos", pos)
+        events.emit("character_pos", pos)  // checking future position
 
         events.on("check_collision", this, (object) => {
             this.canWalk = false;

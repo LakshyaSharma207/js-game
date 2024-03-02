@@ -1,4 +1,5 @@
 import { boundaries } from "../main";
+import { events } from "./events";
 import { GridNode } from "./node";
 import { Vector2 } from "./vector2";
 
@@ -23,13 +24,13 @@ export class Astar {
 
         // Start and goal are the same tile
         if (this.START.tx === this.GOAL.tx && this.START.ty === this.GOAL.ty) {
-            console.log('great');
+            // console.log('great');
             return this.GOAL;
         }
 
         // main function
         while(this.OPEN.length > 0) {		
-            // Get best node n from OPEN
+            // Get best node n from OPEN list
             let n = this.getLowestFromOpen();
             
             this.CLOSED.push(n);

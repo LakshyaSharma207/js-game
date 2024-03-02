@@ -63,7 +63,7 @@ const wumpus = new Wumpus(gridCells(1), gridCells(1), hero.position);
 mainScene.addChild(wumpus);
 
 // A star Pathfinding
-mainScene.pathFind = new Astar();
+mainScene.astarPathFind = new Astar();
 
 // camera
 const camera = new Camera();

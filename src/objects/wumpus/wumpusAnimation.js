@@ -30,4 +30,42 @@ const makeChasingFrames = (rootFrame = 0) => {
     }
 }
 
+const makeIdleFrames = (rootFrame = 0) => {
+    return {
+        duration: 100,
+        frames: [
+            {
+                time: 0,
+                frame: rootFrame,
+            }
+        ]
+    }
+}
+
+const makeAttackingFrames = (rootFrame = 0) => {
+    return {
+        duration: 400,
+        frames: [
+            {
+                time: 0,
+                frame: rootFrame,
+            },
+            {
+                time: 100,
+                frame: rootFrame + 1,
+            },
+            {
+                time: 200,
+                frame: rootFrame,
+            },
+            {
+                time: 300,
+                frame: rootFrame - 1,
+            },
+        ]
+    }
+}
+
 export const chase = makeChasingFrames(3);
+export const idle = makeIdleFrames(3);
+export const attacking = makeAttackingFrames(4);
