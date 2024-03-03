@@ -95,8 +95,26 @@ const draw =  () => {
   let coinCount = hud.coinCount;
   ctx.fillText(`X ${coinCount}`, 20, 14);
 
-  // draw boundaries
-  // boundaries.forEach(b => b.draw(ctx, 0, 0));
+  // for fog of war still testing
+  // var fogCanvas = document.createElement('canvas');
+  // fogCanvas.width = gameCanvas.width;
+  // fogCanvas.height = gameCanvas.height;
+
+  // var fogContext = fogCanvas.getContext('2d');
+  // fogContext.fillStyle = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black
+  // fogContext.fillRect(0, 0, fogCanvas.width, fogCanvas.height);
+  // var playerFieldOfView = 100; // Adjust as needed
+  // var playerX = player.position.x;
+  // var playerY = player.position.y;
+
+  // fogContext.clearRect(
+  //   playerX - playerFieldOfView / 2,
+  //   playerY - playerFieldOfView / 2,
+  //   playerFieldOfView,
+  //   playerFieldOfView
+  // );
+  // gameContext.drawImage(fogCanvas, 0, 0);
+
 }
 
 // updating game state
