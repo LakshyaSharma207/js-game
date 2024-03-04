@@ -7,7 +7,7 @@ import { DOWN, LEFT, RIGHT, UP } from "../../keyInput";
 import { resources } from "../../resource";
 import { Sprite } from "../../sprite";
 import { Vector2 } from "../../vector2";
-import { hitDown, hitLeft, hitRight, hitUP, standDown, standLeft, standRight, standUP, walkDown, walkLeft, walkRight, walkUP } from "./heroAnimation";
+import { deathDown, deathLeft, deathRight, deathUP, hitDown, hitLeft, hitRight, hitUP, standDown, standLeft, standRight, standUP, walkDown, walkLeft, walkRight, walkUP } from "./heroAnimation";
 
 export class Hero extends GameObject {
     constructor(x, y) {
@@ -15,12 +15,12 @@ export class Hero extends GameObject {
             position: new Vector2(x, y)
         });
 
-        const shadow = new Sprite({
+        this.shadow = new Sprite({
             resource: resources.images.shadow,
             frameSize: new Vector2(32, 32),
             position: new Vector2(-8, -19),
         })
-        this.addChild(shadow);
+        this.addChild(this.shadow);
 
         this.body = new Sprite({
             resource: resources.images.agent,
@@ -42,6 +42,10 @@ export class Hero extends GameObject {
               hitUP: new FrameIndexPattern(hitUP),
               hitLeft: new FrameIndexPattern(hitLeft),
               hitRight: new FrameIndexPattern(hitRight),
+              deathDown: new FrameIndexPattern(deathDown),
+              deathUP: new FrameIndexPattern(deathUP),
+              deathRight: new FrameIndexPattern(deathRight),
+              deathLeft: new FrameIndexPattern(deathLeft),
             })
           });
         
@@ -50,12 +54,39 @@ export class Hero extends GameObject {
         this.destinationPosition = this.position.duplicate();
         this.canWalk = true;
         this.isHit = false;
-        this.hitTimer = null;
-
-        
+        this.hitCount = 0;
+        this.hitTimer;
+        this.isDead = false;
     }
 
     step(delta, root) {
+        if (this.isDead) {
+            return;
+        }
+        if (this.hitCount > 2) {
+            this.isDead = true;
+            this.body.position.x += 16;
+            this.shadow.position.x += 16;
+            switch (this.facingDirection) {
+                case DOWN:
+                    this.body.animations.play("deathDown");
+                    break;
+                case LEFT:
+                    this.body.animations.play("deathLeft");
+                    break;
+                case RIGHT:
+                    this.body.animations.play("deathRight");
+                    break;
+                case UP:
+                    this.body.animations.play("deathUP");
+                    break;
+            }
+            setTimeout(() => {
+                root.gameOver = true;
+            }, 2200)
+            return;
+        }
+
         const distance = moveTowards(this, this.destinationPosition, 2);
         const hasArrived = distance <= 1;
         if (hasArrived) {
@@ -72,7 +103,6 @@ export class Hero extends GameObject {
         this.lastX = this.position.x;
         this.lastY = this.position.y;
         events.emit("hero_position", this.position)
-        // events.emit("hero_hit", this.isHit)
     }
     
 
@@ -154,18 +184,10 @@ export class Hero extends GameObject {
                 break;
         }
         // checking for wumpus attack
-        events.on("check_attacking", this, (pos) => {
-            
-            if (this.destinationPosition.x >= pos.minX && this.destinationPosition.x <= pos.maxX && this.destinationPosition.y >= pos.minY && this.destinationPosition.y <= pos.maxY) {
-                // objects overlapped
-                console.log('work pls')
-                clearTimeout(this.hitTimer);
-                this.hitTimer = setTimeout(() => {
-                    this.isHit = false;
-                }, 1000);
-                this.isHit = true;
-            }
-        });
+        if(this.isHit === false) {
+            // console.log("hitting")
+            this.checkForHit();
+        }
         this.facingDirection = input.direction ?? this.facingDirection;
         
         // is the place character movig to solid or ground?
@@ -184,5 +206,22 @@ export class Hero extends GameObject {
             this.canWalk = false;
        })
     //    console.log(this.canWalk);
+    }
+
+    checkForHit() {
+        events.on("check_attacking", this, (pos) => {
+            if(this.isHit){
+                return;
+            }
+            if (this.destinationPosition.x >= pos.minX && this.destinationPosition.x <= pos.maxX && this.destinationPosition.y >= pos.minY && this.destinationPosition.y <= pos.maxY) {
+                // objects overlapped
+                this.isHit = true;
+                clearTimeout(this.hitTimer);
+                this.hitTimer = setTimeout(() => {
+                    this.isHit = false;
+                    this.hitCount ++;
+                }, 1000);
+            }
+        });
     }
 }

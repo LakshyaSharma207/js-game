@@ -5,7 +5,7 @@ class Resources {
             shadow: "/sprites/shadow.png",
             coins: "/sprites/MonedaD.png",
             wumpus: "/sprites/Slime.png",
-            agent: "/sprites/Archer-Green.png"
+            agent: "/sprites/Archer-Green.png",
         };
 
         this.images = {};

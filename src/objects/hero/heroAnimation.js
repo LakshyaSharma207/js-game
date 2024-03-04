@@ -63,6 +63,39 @@ const makeInvulnerableFrames = (rootFrame = 0) => {
     }
 }
 
+const makeDeathFrames = (rootFrame = 0) => {
+    return {
+        duration: 3000,
+        frames: [
+            {
+                time: 0,
+                frame: rootFrame,
+            },
+            {
+                time: 200,
+                frame: rootFrame + 1,
+            },
+            {
+                time: 900,
+                frame: rootFrame + 2,
+            },
+            {
+                time: 1600,
+                frame: rootFrame + 3,
+            },
+            {
+                time: 2300,
+                frame: rootFrame + 4,
+            },
+        ]
+    }
+}
+
+export const deathDown = makeDeathFrames(19);
+export const deathUP = makeDeathFrames(111);
+export const deathLeft = makeDeathFrames(157);
+export const deathRight = makeDeathFrames(65);
+
 export const hitDown = makeInvulnerableFrames(19);
 export const hitUP = makeInvulnerableFrames(111);
 export const hitLeft = makeInvulnerableFrames(157);

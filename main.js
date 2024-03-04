@@ -75,46 +75,41 @@ const hud = new Hud();
 // add input class to move character
 mainScene.input = new KeyInput();
 
+// add gameover flag
+mainScene.gameOver = false;
+var coinCount = 0;
+
 const draw =  () => {
   // Clear anything stale
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // save current state for camera to work
-  ctx.save();
-  // offset canvas
-  ctx.translate(camera.position.x, camera.position.y);
+  if (mainScene.gameOver) {
+    // console.log("game over")
+    ctx.font = '40px sans-serif';
+    ctx.fillText('Game Over', 60, 70);
 
-  // draw all objects in main scene
-  mainScene.draw(ctx, 0, 0);
+    ctx.font = '20px sans-serif';
+    ctx.fillText(`You Got: ${coinCount} coins`, 65, 100);
+    let mssg = coinCount < 5 ? 'Better luck next time' : 'Great Job getting all the coins';
+    ctx.fillText(`${mssg}`, 65, 130);
 
-  // restore canvas
-  ctx.restore();
+  } else {
+    // save current state for camera to work
+    ctx.save();
+    // offset canvas
+    ctx.translate(camera.position.x, camera.position.y);
 
-  // draw hud ui
-  hud.draw(ctx, 0, 0);
-  let coinCount = hud.coinCount;
-  ctx.fillText(`X ${coinCount}`, 20, 14);
+    // draw all objects in main scene
+    mainScene.draw(ctx, 0, 0);
 
-  // for fog of war still testing
-  // var fogCanvas = document.createElement('canvas');
-  // fogCanvas.width = gameCanvas.width;
-  // fogCanvas.height = gameCanvas.height;
+    // restore canvas
+    ctx.restore();
 
-  // var fogContext = fogCanvas.getContext('2d');
-  // fogContext.fillStyle = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black
-  // fogContext.fillRect(0, 0, fogCanvas.width, fogCanvas.height);
-  // var playerFieldOfView = 100; // Adjust as needed
-  // var playerX = player.position.x;
-  // var playerY = player.position.y;
-
-  // fogContext.clearRect(
-  //   playerX - playerFieldOfView / 2,
-  //   playerY - playerFieldOfView / 2,
-  //   playerFieldOfView,
-  //   playerFieldOfView
-  // );
-  // gameContext.drawImage(fogCanvas, 0, 0);
-
+    // draw hud ui
+    hud.draw(ctx, 0, 0);
+    coinCount = hud.coinCount;
+    ctx.fillText(`X ${coinCount}`, 20, 14);
+  }
 }
 
 // updating game state
