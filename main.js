@@ -55,12 +55,19 @@ boundaries.forEach(b => mainScene.addChild(b));
 
 
 // hero game object added
-const hero = new Hero(gridCells(6), gridCells(4));
+const hero = new Hero(gridCells(16), gridCells(4));
 mainScene.addChild(hero);
 
 // wumpus game object added
-const wumpus = new Wumpus(gridCells(1), gridCells(1), hero.position);
+const wumpus = new Wumpus(gridCells(12), gridCells(1), hero.position);
 mainScene.addChild(wumpus);
+
+// adding foreground
+const foreGround = new Sprite({
+  resource: resources.images.foreground,
+  frameSize: new Vector2(1200, 720),
+});
+mainScene.addChild(foreGround);
 
 // A star Pathfinding
 mainScene.astarPathFind = new Astar();
@@ -79,6 +86,10 @@ mainScene.input = new KeyInput();
 mainScene.gameOver = false;
 var coinCount = 0;
 
+if (hero.position === new Vector2(0, 0)) {
+  mainScene.gameOver = true;
+}
+
 const draw =  () => {
   // Clear anything stale
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -90,7 +101,14 @@ const draw =  () => {
 
     ctx.font = '20px sans-serif';
     ctx.fillText(`You Got: ${coinCount} coins`, 65, 100);
-    let mssg = coinCount < 5 ? 'Better luck next time' : 'Great Job getting all the coins';
+    let mssg;
+    if (coinCount < 5) {
+      mssg = 'Better luck next time';
+    } else if (coinCount > 5 && coinCount != 10) {
+      mssg = "You're there... just hang on and replay.";
+    } else if (coinCount >= 10) {
+      mssg = "Great Job getting all coins. Now give me all the marks for mini project as well ;)";
+    }
     ctx.fillText(`${mssg}`, 65, 130);
 
   } else {

@@ -2,6 +2,7 @@ class Resources {
     constructor() {
         this.toLoad = {
             ground: "/dungeon.png",
+            foreground: "/foreground.png",
             shadow: "/sprites/shadow.png",
             coins: "/sprites/MonedaD.png",
             wumpus: "/sprites/Slime.png",

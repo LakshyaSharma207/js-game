@@ -1,11 +1,6 @@
-## Work in Progress
+This is a HTML5 canvas and Javascript only browser game without any frameworks or libraries. Made as a mini project for AI subject in my college, but also because I like playing games and someday wanted to make my own with a game engine, animations and all (not just cli ones).
 
-A simple implementation of game engine in javascript is done.
-
-Hero and Wumpus Animations and movement is done.
-
-Implementation of A-star Algorithm for enemy AI is done.
-
-Winning condition is doen and Map is also mostly complete
+#### TODO 
+determine escape Vectors and make coins appear at random places.
 
 I am using free Pixel Art Assets from - [Map](https://0x72.itch.io/16x16-dungeon-tileset), [Characters](https://merchant-shade.itch.io/16x16-puny-characters).
