@@ -30,8 +30,10 @@ const groundSprite = new Sprite({
 mainScene.addChild(groundSprite);
 
 // coins sprite
-const coins = new Coins(gridCells(7), gridCells(6));
-mainScene.addChild(coins);
+// const coins = new Coins(gridCells(7), gridCells(6));
+// mainScene.addChild(coins);
+
+/// TODO: Coin random geenration
 
 // add boundaries
 export const boundaries = [];
