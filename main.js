@@ -8,11 +8,11 @@ import { Vector2 } from './src/vector2';
 import { GameObject } from './src/objects/gameObject.js';
 import { Hero } from './src/objects/hero/hero.js';
 import { Camera } from './src/camera.js';
-import { Coins } from './src/objects/coins/coins.js';
 import { Hud } from './src/objects/hud/hud.js';
 import { Wumpus } from './src/objects/wumpus/wumpus.js';
 import { Boundary } from './src/boundary.js';
 import { Astar } from './src/A-star.js';
+import { spawnCoins } from './src/helpers/spawnCoins.js';
 
 const canvas = document.querySelector("#game-canvas");
 const ctx = canvas.getContext("2d");
@@ -28,12 +28,6 @@ const groundSprite = new Sprite({
   frameSize: new Vector2(1200, 720),
 });
 mainScene.addChild(groundSprite);
-
-// coins sprite
-// const coins = new Coins(gridCells(7), gridCells(6));
-// mainScene.addChild(coins);
-
-/// TODO: Coin random geenration
 
 // add boundaries
 export const boundaries = [];
@@ -53,8 +47,12 @@ collisionMap.forEach((row, i) => {
   })
 });
 boundaries.forEach(b => mainScene.addChild(b));
-// console.log(mainScene);
 
+// coins sprite randomly generated
+let coinsArray = spawnCoins(11, 58, 1, 38, 20);
+for (let i = 0; i < coinsArray.length; i++) {
+  mainScene.addChild(coinsArray[i]);
+}
 
 // hero game object added
 const hero = new Hero(gridCells(16), gridCells(4));
@@ -104,11 +102,11 @@ const draw =  () => {
     ctx.font = '20px sans-serif';
     ctx.fillText(`You Got: ${coinCount} coins`, 65, 100);
     let mssg;
-    if (coinCount < 5) {
+    if (coinCount < 10) {
       mssg = 'Better luck next time';
-    } else if (coinCount > 5 && coinCount != 10) {
+    } else if (coinCount > 10 && coinCount != 20) {
       mssg = "You're there... just hang on and replay.";
-    } else if (coinCount >= 10) {
+    } else if (coinCount >= 20) {
       mssg = "Great Job getting all coins. Now give me all the marks for mini project as well ;)";
     }
     ctx.fillText(`${mssg}`, 65, 130);

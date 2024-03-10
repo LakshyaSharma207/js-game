@@ -17,9 +17,9 @@ export class GridNode {
 
     // manhatten distance method
     calcHeuristic(pos, goal) {
-        const movementcost = 1;
+        const weight = 55;  // weighted A * adjust based on requirements
         let dx = Math.abs(goal.tx - pos.tx);
         let dy = Math.abs(goal.ty - pos.ty);
-        return movementcost * (dx + dy);
+        return weight * (dx + dy);
     }
 }

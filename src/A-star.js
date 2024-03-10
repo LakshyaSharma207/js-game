@@ -10,6 +10,7 @@ export class Astar {
     this.START;
     this.GOAL;
     this.gridSize = 16;
+    this.closedSet = new Array(100000).fill(false);
   }
 
   findPath(start, goal) {
@@ -19,6 +20,7 @@ export class Astar {
 
     this.OPEN = [this.START];
     this.CLOSED = [];
+    this.closedSet = new Array(100000).fill(false);
 
     // Start and goal are the same tile
     if (this.START.tx === this.GOAL.tx && this.START.ty === this.GOAL.ty) {
@@ -30,8 +32,9 @@ export class Astar {
     while (this.OPEN.length > 0) {
       // Get best node n from OPEN list
       let n = this.getLowestFromOpen();
-
+      
       this.CLOSED.push(n);
+      this.closedSet[n.tx * 1000 + n.ty] = true;
 
       // n is the goal, we are done
       if (n.tx === this.GOAL.tx && n.ty === this.GOAL.ty) {
@@ -46,9 +49,10 @@ export class Astar {
         let child = children[i];
 
         // skips node already travelled without breaking loop
-        if (this.getNodeIdxInList(this.CLOSED, child) >= 0) {
-          continue;
-        }
+        // if (this.getNodeIdxInList(this.CLOSED, child) >= 0) {
+        //   continue;
+        // }
+        if (this.closedSet[child.tx * 1000 + child.ty]) continue;
 
         child.g = n.g + 1;
         child.h = n.calcHeuristic(child, this.GOAL);
@@ -94,70 +98,32 @@ export class Astar {
 
   getNeighbors(node) {
     let neighbors = [];
+    let directions = [
+      { dx: -this.gridSize, dy: 0, direction: 'left' }, // Left
+      { dx: this.gridSize, dy: 0, direction: 'right' },  // Right
+      { dx: 0, dy: -this.gridSize, direction: 'up' }, // Up
+      { dx: 0, dy: this.gridSize, direction: 'down' },  // Down
+    ];
 
-    // Left neighbor
-    if (node.tx - this.gridSize >= 0 && this.checkWalkable(node, "left")) {
-      let pos = new Vector2(node.tx - this.gridSize, node.ty);
-      neighbors.push(new GridNode(pos, this.GOAL, node, "left"));
-    }
+    for (let dir of directions) {
+      let tx = node.tx + dir.dx;
+      let ty = node.ty + dir.dy;
 
-    // Right neighbor
-    if (node.tx + this.gridSize >= 0 && this.checkWalkable(node, "right")) {
-      let pos = new Vector2(node.tx + this.gridSize, node.ty);
-      neighbors.push(new GridNode(pos, this.GOAL, node, "right"));
-    }
-
-    // Up neighbor
-    if (node.ty - this.gridSize >= 0 && this.checkWalkable(node, "up")) {
-      let pos = new Vector2(node.tx, node.ty - this.gridSize);
-      neighbors.push(new GridNode(pos, this.GOAL, node, "up"));
-    }
-
-    // Down neighbor
-    if (node.ty + this.gridSize >= 0 && this.checkWalkable(node, "down")) {
-      let pos = new Vector2(node.tx, node.ty + this.gridSize);
-      neighbors.push(new GridNode(pos, this.GOAL, node, "down"));
+      if (this.checkWalkable(tx, ty)) {
+        neighbors.push(new GridNode(new Vector2(tx, ty), this.GOAL, node, dir.direction));
+      }
     }
 
     return neighbors;
   }
 
   // refactor and check specific directions for smoother gameplay loop
-  checkWalkable(n, dir) {
-    let direction = dir || "";
-    let isSpaceFree = true;
-
-    switch (direction.toLowerCase()) {
-      case "left":
-        isSpaceFree = this.checkBound(new Vector2(n.tx - this.gridSize, n.ty));
-        break;
-
-      case "right":
-        isSpaceFree = this.checkBound(new Vector2(n.tx + this.gridSize, n.ty));
-        break;
-
-      case "up":
-        isSpaceFree = this.checkBound(new Vector2(n.tx, n.ty - this.gridSize));
-        break;
-
-      case "down":
-        isSpaceFree = this.checkBound(new Vector2(n.tx, n.ty + this.gridSize));
-        break;
-
-      default:
-        break;
-    }
-    return isSpaceFree;
-  }
-
-  checkBound(pos) {
-    let isSpaceFree = !boundaries.some((b) => {
-      if (b.position.x === pos.x && b.position.y === pos.y) {
-        // console.log('okkk');
-        return true;
-      }
-    });
-    return isSpaceFree;
+  checkWalkable(tx, ty) {
+    return (
+      tx >= 0 &&
+      ty >= 0 &&
+      !boundaries.some((b) => b.position.x === tx && b.position.y === ty)
+    );
   }
 
   getNodeIdxInList(arr, node) {
