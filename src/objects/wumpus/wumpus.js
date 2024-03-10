@@ -36,7 +36,7 @@ export class Wumpus extends GameObject {
     }
 
     step(delta, root) {
-        const distance = moveTowards(this, this.destinationPosition, 1.5);
+        const distance = moveTowards(this, this.destinationPosition, 1.7);
         const hasArrived = distance <= 0;
         if (hasArrived) {
             this.tryMove(root);
@@ -60,26 +60,26 @@ export class Wumpus extends GameObject {
             };            
             events.emit("check_attacking", hitboxObject);
             // console.log(this.path, 'path');
-            // switch (this.path.direction) {
-            //     case 'left':
-            //         this.destinationPosition.x -= gridSize;
-            //         this.body.animations.play("chase");
-            //         break;
-            //     case 'right':
-            //         this.destinationPosition.x += gridSize;
-            //         this.body.animations.play("chase");
-            //         break;
-            //     case 'up':
-            //         this.destinationPosition.y -= gridSize;
-            //         this.body.animations.play("chase");
-            //         break;
-            //     case 'down':
-            //         this.destinationPosition.y += gridSize;
-            //         this.body.animations.play("chase");
-            //         break;
-            //     default:
-            //         this.body.animations.play("attack");
-            // }            
+            switch (this.path.direction) {
+                case 'left':
+                    this.destinationPosition.x -= gridSize;
+                    this.body.animations.play("chase");
+                    break;
+                case 'right':
+                    this.destinationPosition.x += gridSize;
+                    this.body.animations.play("chase");
+                    break;
+                case 'up':
+                    this.destinationPosition.y -= gridSize;
+                    this.body.animations.play("chase");
+                    break;
+                case 'down':
+                    this.destinationPosition.y += gridSize;
+                    this.body.animations.play("chase");
+                    break;
+                default:
+                    this.body.animations.play("attack");
+            }            
         }
     }
 }

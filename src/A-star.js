@@ -10,7 +10,7 @@ export class Astar {
     this.START;
     this.GOAL;
     this.gridSize = 16;
-    this.closedSet = new Array(100000).fill(false);
+    this.closedSet = new Set();
   }
 
   findPath(start, goal) {
@@ -20,7 +20,7 @@ export class Astar {
 
     this.OPEN = [this.START];
     this.CLOSED = [];
-    this.closedSet = new Array(100000).fill(false);
+    this.closedSet = new Set();
 
     // Start and goal are the same tile
     if (this.START.tx === this.GOAL.tx && this.START.ty === this.GOAL.ty) {
@@ -34,7 +34,7 @@ export class Astar {
       let n = this.getLowestFromOpen();
       
       this.CLOSED.push(n);
-      this.closedSet[n.tx * 1000 + n.ty] = true;
+      this.closedSet.add(`${n.tx}_${n.ty}`);
 
       // n is the goal, we are done
       if (n.tx === this.GOAL.tx && n.ty === this.GOAL.ty) {
@@ -52,7 +52,8 @@ export class Astar {
         // if (this.getNodeIdxInList(this.CLOSED, child) >= 0) {
         //   continue;
         // }
-        if (this.closedSet[child.tx * 1000 + child.ty]) continue;
+        const key = `${child.tx}_${child.ty}`;
+        if (this.closedSet.has(key)) continue;
 
         child.g = n.g + 1;
         child.h = n.calcHeuristic(child, this.GOAL);
