@@ -14,12 +14,13 @@ export default class BinaryHeap {
     
     // insert new node and compare with parents
     insert(node) {
-        if (this.heapSet.has(node)) {
+        const key = `${node.tx}_${node.ty}`;
+        if (this.heapSet.has(key)) {
             return;
         }
 
         this.heap.push(node);
-        this.heapSet.add(node);
+        this.heapSet.add(key);
         let index = this.length - 1;
         // console.log(index)
         while (index > 0) {
@@ -40,6 +41,7 @@ export default class BinaryHeap {
     extractMin() {
         const min = this.heap[0];
         const end = this.heap.pop();
+        this.heapSet.delete(`${min.tx}_${min.ty}`);
 
         if (this.length > 0) {
             this.heap[0] = end;

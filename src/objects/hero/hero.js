@@ -193,6 +193,7 @@ export class Hero extends GameObject {
         // is the place character movig to solid or ground?
         this.canWalk = true;
         this.isSpaceFree(new Vector2(nextX, nextY))
+
         if (this.canWalk) {
             this.destinationPosition.y = nextY;
             this.destinationPosition.x = nextX;

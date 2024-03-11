@@ -1,10 +1,11 @@
 import { boundaries } from "../main";
+import BinaryHeap from "./binaryHeap";
 import { GridNode } from "./node";
 import { Vector2 } from "./vector2";
 
 export class Astar {
   constructor() {
-    this.OPEN = [];
+    this.OPEN = new BinaryHeap();
     this.CLOSED = [];
 
     this.START;
@@ -18,7 +19,8 @@ export class Astar {
     this.START = new GridNode(start, goal);
     this.GOAL = new GridNode(goal, goal);
 
-    this.OPEN = [this.START];
+    this.OPEN = new BinaryHeap();
+    this.OPEN.insert(this.START);
     this.CLOSED = [];
     this.closedSet = new Set();
 
@@ -29,9 +31,10 @@ export class Astar {
     }
 
     // main function
-    while (this.OPEN.length > 0) {
+    while (!this.OPEN.isEmpty) {
       // Get best node n from OPEN list
-      let n = this.getLowestFromOpen();
+      // let n = this.getLowestFromOpen();
+      let n = this.OPEN.extractMin();
       
       this.CLOSED.push(n);
       this.closedSet.add(`${n.tx}_${n.ty}`);
@@ -59,14 +62,14 @@ export class Astar {
         child.h = n.calcHeuristic(child, this.GOAL);
         child.f = child.g + child.h;
 
-        let result = this.OPEN.find(
-          (obj) => obj.tx === child.tx && obj.ty === child.ty,
-        );
-        if (result) {
-          continue;
-        }
+        // let result = this.OPEN.heap.find(
+        //   (obj) => obj.tx === child.tx && obj.ty === child.ty,
+        // );
+        // if (result) {
+        //   continue;
+        // }
 
-        this.OPEN.push(child);
+        this.OPEN.insert(child);
       }
     }
 

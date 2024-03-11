@@ -13,6 +13,7 @@ import { Wumpus } from './src/objects/wumpus/wumpus.js';
 import { Boundary } from './src/boundary.js';
 import { Astar } from './src/A-star.js';
 import { spawnCoins } from './src/helpers/spawnCoins.js';
+import { events } from './src/events.js';
 
 const canvas = document.querySelector("#game-canvas");
 const ctx = canvas.getContext("2d");
@@ -86,9 +87,15 @@ mainScene.input = new KeyInput();
 mainScene.gameOver = false;
 var coinCount = 0;
 
-if (hero.position === new Vector2(0, 0)) {
-  mainScene.gameOver = true;
-}
+// checking for exit vectors
+events.on("character_pos", this, (heroPosition) => {
+  const roundedX = Math.round(heroPosition.x);
+  const roundedY = Math.round(heroPosition.y);
+
+  if ((roundedX === 528 && roundedY === -16) || (roundedX === 512 && roundedY === -16)) {
+     mainScene.gameOver = true;
+  }
+})
 
 const draw =  () => {
   // Clear anything stale
