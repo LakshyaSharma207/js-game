@@ -9,7 +9,7 @@ import { attacking, chase, idle } from "./wumpusAnimation";
 import { events } from "../../events";
 
 export class Wumpus extends GameObject {
-    constructor(x, y, heroPos) {
+    constructor(x, y, heroPos, heroDir) {
         super({
             position: new Vector2(x, y)
         })
@@ -29,7 +29,7 @@ export class Wumpus extends GameObject {
         })
         this.addChild(this.body);
         this.destinationPosition = this.position.duplicate();
-        // this.canWalk = true;
+        this.heroDir = heroDir;
         this.heroPos = heroPos;
         this.path;
         this.hitbox = 34;
@@ -48,7 +48,23 @@ export class Wumpus extends GameObject {
         const gridSize = 16;
 
         let nextXY = this.destinationPosition.duplicate();
-        const newPath = astarPathFind.findPath(nextXY, this.heroPos);
+        let newHeroPos = this.heroPos.duplicate();
+        // new feature still in beta
+        if (this.heroDir === DOWN) {
+            newHeroPos = new Vector2(this.heroPos.x, this.heroPos.y + (gridSize * 2));
+        }
+        else if (this.heroDir === UP) {
+            newHeroPos = new Vector2(this.heroPos.x, this.heroPos.y - (gridSize * 2));
+        } 
+        else if (this.heroDir === LEFT) {
+            newHeroPos = new Vector2(this.heroPos.x - (gridSize * 2), this.heroPos.y);
+        } 
+        else if (this.heroDir === RIGHT) {
+            newHeroPos = new Vector2(this.heroPos.x + (gridSize * 2), this.heroPos.y);
+        } 
+
+        // finds the path using A star and returns immedeate node to travel
+        const newPath = astarPathFind.findPath(nextXY, newHeroPos);
 
         if (newPath) {
             this.path = newPath;
