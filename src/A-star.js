@@ -130,12 +130,12 @@ export class Astar {
     );
   }
 
-  getNodeIdxInList(arr, node) {
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i].tx == node.tx && arr[i].ty == node.ty) {
-        return i;
-      }
-    }
-    return -1;
-  }
+  // getNodeIdxInList(arr, node) {
+  //   for (let i = 0; i < arr.length; i++) {
+  //     if (arr[i].tx == node.tx && arr[i].ty == node.ty) {
+  //       return i;
+  //     }
+  //   }
+  //   return -1;
+  // }
 }

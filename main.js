@@ -60,7 +60,7 @@ const hero = new Hero(gridCells(16), gridCells(4));
 mainScene.addChild(hero);
 
 // wumpus game object added
-const wumpus = new Wumpus(gridCells(12), gridCells(1), hero.position, hero.facingDirection);
+const wumpus = new Wumpus(gridCells(12), gridCells(1), hero.position);
 mainScene.addChild(wumpus);
 
 // adding foreground

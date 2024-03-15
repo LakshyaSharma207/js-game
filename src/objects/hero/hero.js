@@ -102,7 +102,8 @@ export class Hero extends GameObject {
         }
         this.lastX = this.position.x;
         this.lastY = this.position.y;
-        events.emit("hero_position", this.position)
+        events.emit("hero_position", this.position);
+        events.emit("hero_dir", this.facingDirection);
     }
     
 
@@ -191,9 +192,9 @@ export class Hero extends GameObject {
         this.facingDirection = input.direction ?? this.facingDirection;
         
         // is the place character movig to solid or ground?
+        
         this.canWalk = true;
         this.isSpaceFree(new Vector2(nextX, nextY))
-
         if (this.canWalk) {
             this.destinationPosition.y = nextY;
             this.destinationPosition.x = nextX;

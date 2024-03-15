@@ -36,7 +36,7 @@ export class Wumpus extends GameObject {
     }
 
     step(delta, root) {
-        const distance = moveTowards(this, this.destinationPosition, 1.7);
+        const distance = moveTowards(this, this.destinationPosition, 1.8);
         const hasArrived = distance <= 0;
         if (hasArrived) {
             this.tryMove(root);
@@ -48,23 +48,9 @@ export class Wumpus extends GameObject {
         const gridSize = 16;
 
         let nextXY = this.destinationPosition.duplicate();
-        let newHeroPos = this.heroPos.duplicate();
-        // new feature still in beta
-        if (this.heroDir === DOWN) {
-            newHeroPos = new Vector2(this.heroPos.x, this.heroPos.y + (gridSize * 2));
-        }
-        else if (this.heroDir === UP) {
-            newHeroPos = new Vector2(this.heroPos.x, this.heroPos.y - (gridSize * 2));
-        } 
-        else if (this.heroDir === LEFT) {
-            newHeroPos = new Vector2(this.heroPos.x - (gridSize * 2), this.heroPos.y);
-        } 
-        else if (this.heroDir === RIGHT) {
-            newHeroPos = new Vector2(this.heroPos.x + (gridSize * 2), this.heroPos.y);
-        } 
 
         // finds the path using A star and returns immedeate node to travel
-        const newPath = astarPathFind.findPath(nextXY, newHeroPos);
+        const newPath = astarPathFind.findPath(nextXY, this.heroPos);
 
         if (newPath) {
             this.path = newPath;
