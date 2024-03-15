@@ -103,7 +103,6 @@ export class Hero extends GameObject {
         this.lastX = this.position.x;
         this.lastY = this.position.y;
         events.emit("hero_position", this.position);
-        events.emit("hero_dir", this.facingDirection);
     }
     
 

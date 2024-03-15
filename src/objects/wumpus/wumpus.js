@@ -9,7 +9,7 @@ import { attacking, chase, idle } from "./wumpusAnimation";
 import { events } from "../../events";
 
 export class Wumpus extends GameObject {
-    constructor(x, y, heroPos, heroDir) {
+    constructor(x, y, heroPos) {
         super({
             position: new Vector2(x, y)
         })
@@ -29,7 +29,6 @@ export class Wumpus extends GameObject {
         })
         this.addChild(this.body);
         this.destinationPosition = this.position.duplicate();
-        this.heroDir = heroDir;
         this.heroPos = heroPos;
         this.path;
         this.hitbox = 34;
